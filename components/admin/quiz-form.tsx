@@ -85,7 +85,7 @@ export function QuizForm({ quiz, batches, onSubmit }: QuizFormProps) {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div>
+        {/* <div>
           <Label htmlFor="batch_id">Batch</Label>
           <Controller
             control={control}
@@ -108,7 +108,7 @@ export function QuizForm({ quiz, batches, onSubmit }: QuizFormProps) {
           {errors.batch_id && (
             <p className="mt-1.5 text-xs text-destructive">{errors.batch_id.message}</p>
           )}
-        </div>
+        </div> */}
 
         <div>
           <Label htmlFor="duration_minutes">Duration (minutes)</Label>

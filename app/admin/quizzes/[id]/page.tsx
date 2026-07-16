@@ -50,7 +50,7 @@ export default async function EditQuizPage({
       <Tabs defaultValue="questions">
         <TabsList>
           <TabsTrigger value="questions">Questions</TabsTrigger>
-          <TabsTrigger value="details">Details</TabsTrigger>
+          {/* <TabsTrigger value="details">Details</TabsTrigger> */}
         </TabsList>
 
         <TabsContent value="questions">
