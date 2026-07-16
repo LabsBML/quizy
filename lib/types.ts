@@ -96,3 +96,11 @@ export interface PublicQuiz {
 export interface QuizAnswerState {
   [questionId: string]: string;
 }
+export interface QuestionReview {
+  id: string;
+  question_text: string;
+  question_type: "mcq" | "short_answer";
+  correct_answer: string;
+  student_answer: string;
+  is_correct: boolean;
+}
