@@ -3,7 +3,7 @@ import { z } from "zod";
 export const quizSchema = z.object({
   title: z.string().trim().min(2, "Title must be at least 2 characters").max(150),
   description: z.string().trim().max(1000).optional().or(z.literal("")),
-  batch_id: z.string().uuid("Select a batch"),
+  batch_id: z.string().optional(),
   duration_minutes: z.coerce
     .number({ invalid_type_error: "Enter a duration" })
     .int()

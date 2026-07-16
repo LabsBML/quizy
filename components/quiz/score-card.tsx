@@ -1,12 +1,28 @@
+interface QuestionReview {
+  id: string;
+  question_text: string;
+  question_type: "mcq" | "short_answer";
+  correct_answer: string;
+  student_answer: string;
+  is_correct: boolean;
+}
+
 interface ScoreCardProps {
   studentName: string;
   quizTitle: string;
   score: number;
   totalPoints: number;
   percentage: number;
+  reviews: QuestionReview[];
 }
-
-export function ScoreCard({ studentName, quizTitle, score, totalPoints, percentage }: ScoreCardProps) {
+export function ScoreCard({
+  studentName,
+  quizTitle,
+  score,
+  totalPoints,
+  percentage,
+  reviews,
+}: ScoreCardProps) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-white px-6">
       <div className="w-full max-w-md text-center">
@@ -29,6 +45,46 @@ export function ScoreCard({ studentName, quizTitle, score, totalPoints, percenta
               style={{ width: `${Math.min(100, Math.max(0, percentage))}%` }}
             />
           </div>
+          <div className="mt-8 space-y-4 text-left">
+  <h3 className="text-sm font-semibold">Answer Review</h3>
+
+<div className="mt-8 space-y-4 text-left">
+  <h3 className="text-sm font-semibold">Answer Review</h3>
+
+  {reviews.map((review, index) => (
+    <div
+      key={review.id}
+      className="rounded-lg border border-border p-4"
+    >
+      <p className="text-sm font-medium">
+        Q{index + 1}. {review.question_text}
+      </p>
+
+      <div className="mt-3 space-y-1 text-xs">
+        <p>
+          <span className="text-muted">Your answer:</span>{" "}
+          <span
+            className={
+              review.is_correct
+                ? "font-medium text-green-600"
+                : "font-medium text-red-600"
+            }
+          >
+            {review.student_answer || "Not answered"}
+          </span>
+        </p>
+
+        <p>
+          <span className="text-muted">Correct answer:</span>{" "}
+          <span className="font-medium text-green-600">
+            {review.correct_answer}
+          </span>
+        </p>
+      </div>
+    </div>
+  ))}
+</div>
+</div>
 
           <p className="mt-6 text-xs text-muted">
             Your responses have been recorded. You may close this window.

@@ -10,13 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import type { Batch, Quiz } from "@/lib/types";
 import type { ActionResult } from "@/lib/actions/batches";
 
@@ -41,12 +35,12 @@ export function QuizForm({ quiz, batches, onSubmit }: QuizFormProps) {
   } = useForm<QuizInput>({
     resolver: zodResolver(quizSchema),
     defaultValues: {
-      title: quiz?.title ?? "",
-      description: quiz?.description ?? "",
-      batch_id: quiz?.batch_id ?? "",
-      duration_minutes: quiz?.duration_minutes ?? 30,
-      published: quiz?.published ?? false,
-    },
+  title: quiz?.title ?? "",
+  description: quiz?.description ?? "",
+  batch_id: quiz?.batch_id ?? "13d71ea3-eec7-4a2d-8d6c-51b938adfafb",
+  duration_minutes: quiz?.duration_minutes ?? 30,
+  published: quiz?.published ?? false,
+},
   });
 
   const published = watch("published");
@@ -56,7 +50,7 @@ export function QuizForm({ quiz, batches, onSubmit }: QuizFormProps) {
     const formData = new FormData();
     formData.set("title", data.title);
     formData.set("description", data.description ?? "");
-    formData.set("batch_id", data.batch_id);
+    formData.set("batch_id", data.batch_id ?? "");
     formData.set("duration_minutes", String(data.duration_minutes));
     if (data.published) formData.set("published", "on");
 
@@ -85,30 +79,7 @@ export function QuizForm({ quiz, batches, onSubmit }: QuizFormProps) {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        {/* <div>
-          <Label htmlFor="batch_id">Batch</Label>
-          <Controller
-            control={control}
-            name="batch_id"
-            render={({ field }) => (
-              <Select value={field.value} onValueChange={field.onChange}>
-                <SelectTrigger id="batch_id">
-                  <SelectValue placeholder="Select a batch" />
-                </SelectTrigger>
-                <SelectContent>
-                  {batches.map((batch) => (
-                    <SelectItem key={batch.id} value={batch.id}>
-                      {batch.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-          {errors.batch_id && (
-            <p className="mt-1.5 text-xs text-destructive">{errors.batch_id.message}</p>
-          )}
-        </div> */}
+      
 
         <div>
           <Label htmlFor="duration_minutes">Duration (minutes)</Label>
@@ -120,6 +91,17 @@ export function QuizForm({ quiz, batches, onSubmit }: QuizFormProps) {
           />
           {errors.duration_minutes && (
             <p className="mt-1.5 text-xs text-destructive">{errors.duration_minutes.message}</p>
+          )}
+        </div>
+          <div >
+          {/* <Label htmlFor="batch_id">Batch</Label> */}
+          <input
+  type="hidden"
+  {...register("batch_id")}
+  value={quiz?.batch_id ?? "AI CREW Helix"}
+/>
+          {errors.batch_id && (
+            <p className="mt-1.5 text-xs text-destructive">{errors.batch_id.message}</p>
           )}
         </div>
       </div>
