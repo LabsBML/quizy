@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
-import { Plus, Pencil, Trash2, BarChart3, ListChecks } from "lucide-react";
+import { useTransition, useState } from "react";
+import { Plus, Pencil, Trash2, BarChart3, ListChecks, Copy,
+  ExternalLink, Check,} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
@@ -24,7 +25,18 @@ import type { QuizWithMeta } from "@/lib/types";
 export function QuizzesTable({ quizzes }: { quizzes: QuizWithMeta[] }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+const copyQuizLink = async (quizId: string) => {
+  const url = `${window.location.origin}/quiz/${quizId}`;
 
+  await navigator.clipboard.writeText(url);
+
+  setCopiedQuizId(quizId);
+
+  setTimeout(() => {
+    setCopiedQuizId(null);
+  }, 800);
+};
+const [copiedQuizId, setCopiedQuizId] = useState<string | null>(null);
   return (
     <div>
       <div className="mb-6 flex justify-end">
@@ -102,6 +114,42 @@ export function QuizzesTable({ quizzes }: { quizzes: QuizWithMeta[] }) {
                           <BarChart3 className="h-4 w-4" />
                         </Link>
                       </Button>
+                      {quiz.published ? (
+  <>
+    <Button
+  variant="ghost"
+  size="icon"
+  onClick={() => copyQuizLink(quiz.id)}
+  title="Copy quiz link"
+>
+  {copiedQuizId === quiz.id ? (
+    <Check className="h-4 w-4 text-green-600 transition-all" />
+  ) : (
+    <Copy className="h-4 w-4 transition-all" />
+  )}
+</Button>
+
+    <Button variant="ghost" size="icon" asChild>
+      <Link
+        href={`/quiz/${quiz.id}`}
+        target="_blank"
+        title="Open quiz"
+      >
+        <ExternalLink className="h-4 w-4" />
+      </Link>
+    </Button>
+  </>
+) : (
+  <>
+    <Button variant="ghost" size="icon" disabled title="Quiz not published">
+      <Copy className="h-4 w-4 text-muted-foreground/40" />
+    </Button>
+
+    <Button variant="ghost" size="icon" disabled title="Quiz not published">
+      <ExternalLink className="h-4 w-4 text-muted-foreground/40" />
+    </Button>
+  </>
+)}
                       <ConfirmDialog
                         trigger={
                           <Button variant="ghost" size="icon">
