@@ -5,6 +5,11 @@ interface QuestionReview {
   correct_answer: string;
   student_answer: string;
   is_correct: boolean;
+  options?: {
+    id: string;
+    option_text: string;
+    sort_order: number;
+  }[];
 }
 
 interface ScoreCardProps {
@@ -45,10 +50,7 @@ export function ScoreCard({
               style={{ width: `${Math.min(100, Math.max(0, percentage))}%` }}
             />
           </div>
-          <div className="mt-8 space-y-4 text-left">
-  <h3 className="text-sm font-semibold">Answer Review</h3>
-
-<div className="mt-8 space-y-4 text-left">
+         <div className="mt-8 space-y-4 text-left">
   <h3 className="text-sm font-semibold">Answer Review</h3>
 
   {reviews.map((review, index) => (
@@ -59,6 +61,37 @@ export function ScoreCard({
       <p className="text-sm font-medium">
         Q{index + 1}. {review.question_text}
       </p>
+
+      {review.question_type === "mcq" &&
+        review.options &&
+        review.options.length > 0 && (
+          <div className="mt-3 grid gap-2">
+            {[...review.options]
+              .sort((a, b) => a.sort_order - b.sort_order)
+              .map((option, i) => {
+                const isCorrect =
+                  option.option_text === review.correct_answer;
+
+                const isStudentAnswer =
+                  option.option_text === review.student_answer;
+
+                return (
+                  <div
+                    key={option.id}
+                    className={`rounded-md border px-3 py-2 text-xs ${
+                      isCorrect
+                        ? "border-green-200 bg-green-50 text-green-700"
+                        : isStudentAnswer
+                        ? "border-red-200 bg-red-50 text-red-700"
+                        : "border-border text-muted"
+                    }`}
+                  >
+                    {String.fromCharCode(65 + i)}. {option.option_text}
+                  </div>
+                );
+              })}
+          </div>
+        )}
 
       <div className="mt-3 space-y-1 text-xs">
         <p>
@@ -83,7 +116,6 @@ export function ScoreCard({
       </div>
     </div>
   ))}
-</div>
 </div>
 
           <p className="mt-6 text-xs text-muted">
